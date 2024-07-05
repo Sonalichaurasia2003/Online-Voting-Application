@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{admin/base :: layout(~{::section})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Make Admin</title>
+</head>
+<body>
+    <section class="center">
+        <h1>Make Admin</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Iterate over each user and display their information -->
+                <tr th:each="user : ${users}"   th:unless="${user.name == 'admin'}">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.name}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td>
+                        <!-- Button to make or remove user admin based on their role -->
+                        <br>
+                        <br>
+                        <form th:if="${not #lists.contains(user.role, 'ROLE_ADMIN')}"
+                              th:action="@{'/admin/make-admin/' + ${user.id}}" method="post">
+                            <button type="submit">Make Admin</button>
+                        </form>
+                        
+                        <form th:if="${#lists.contains(user.role, 'ROLE_ADMIN')}"
+                              th:action="@{'/admin/remove-admin/' + ${user.id}}" method="post">
+                            <button type="submit">Remove Admin</button>
+                        </form>
+                        <br>
+                        <br>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</body>
+</html>
